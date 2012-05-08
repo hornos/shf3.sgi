@@ -1,0 +1,4 @@
+### global
+shf3_sgi_root=$(cd $(dirname "${BASH_SOURCE}");cd ..;pwd -P)
+
+PATH=${PATH}:${shf3_sgi_root}/bin

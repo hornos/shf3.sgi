@@ -1,0 +1,47 @@
+#!/bin/bash
+source $(dirname ${BASH_SOURCE})/../../shf3/lib/header
+include ${HOME}/shf3.sgi/lib
+import gui
+import suse/zypper
+
+tmp="${gbn}.$$"
+
+### trap
+function imgrepo/exit() {
+  if test -r "${tmp}" ; then
+    rm -f "${tmp}"
+  fi
+}
+trap imgrepo/exit INT TERM EXIT
+
+### main
+${suse_zypper} repos
+echo ""
+read -p "Select repo: " _r
+echo ""
+${suse_zypper} lr ${_r} | tee "${tmp}"
+echo ""
+name=$(cat "${tmp}" | awk '/Name/{print $3}')
+if test -z "${name}" ; then
+  msg "Empty repo name"
+  exit 1
+fi
+
+uri=$(cat "${tmp}" | awk '/URI/{print $3}')
+if test -z "${name}" ; then
+  msg "Empty repo uri"
+  exit 1
+fi
+
+type=$(cat "${tmp}" | awk '/Type/{print $3}')
+if test -z "${name}" ; then
+  msg "Empty repo type"
+  exit 1
+fi
+
+cmd="ar -c -t ${type} -n \"${name}\" \"${uri}\""
+echo "${cmd}"
+
+answer "Add repo to the image?"
+if failed $? ; then $failure ; fi
+

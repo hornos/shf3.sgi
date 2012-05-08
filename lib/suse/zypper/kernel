@@ -1,0 +1,14 @@
+
+function suse/zypper/chroot() {
+  import gui
+
+  gui/section chroot zypper
+  echo "chroot: $PWD"
+  echo "command: $*"
+  answer "Continue?"
+  if failed $?; then $failure ; fi
+
+  echo ""
+  ${suse_zypper} --root=${PWD} $*
+  echo ""
+}

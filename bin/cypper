@@ -1,0 +1,7 @@
+#!/bin/bash
+source $(dirname ${BASH_SOURCE})/../../shf3/lib/header
+include ${HOME}/shf3.sgi/lib
+import gui
+import suse/zypper
+
+suse/zypper/chroot $*
