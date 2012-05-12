@@ -1,0 +1,33 @@
+#!/bin/bash
+source $(dirname ${BASH_SOURCE})/../../shf3/lib/header
+include ${HOME}/shf3.sgi/lib
+import gui
+
+tail -f /var/log/firewall | \
+grep DROP | \
+awk '{
+  tm=$1;
+  td=$2;
+  th=$3;
+  n=$4;
+
+  split($8,a,"=");
+  dev=a[2];
+
+  split($11,a,"=");
+  src=a[2];
+
+  split($12,a,"=");
+  dst=a[2];
+
+  split($19,a,"=");
+  prt=a[2];
+
+  split($20,a,"=");
+  spo=a[2];
+
+  split($21,a,"=");
+  dpo=a[2];
+
+  printf("%3s %2s %8s\n",tm,td,th);
+}' -
